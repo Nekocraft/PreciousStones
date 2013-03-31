@@ -5,7 +5,6 @@ import net.sacredlabyrinth.Phaed.PreciousStones.api.facade;
 import net.sacredlabyrinth.Phaed.PreciousStones.listeners.*;
 import net.sacredlabyrinth.Phaed.PreciousStones.managers.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -170,50 +169,11 @@ public class PreciousStones extends JavaPlugin
 
         registerEvents();
         registerCommands();
-        metrics();
     }
 
     private void displayStatusInfo()
     {
         log("psLoaded", getDescription().getVersion());
-    }
-
-    private void metrics()
-    {
-        try
-        {
-            Metrics metrics = new Metrics(this);
-
-            Metrics.Graph protections = metrics.createGraph("Protections in Place");
-
-            protections.addPlotter(new Metrics.Plotter("Total Fields")
-            {
-
-                @Override
-                public int getValue()
-                {
-                    return getForceFieldManager().getCount();
-                }
-
-            });
-
-            protections.addPlotter(new Metrics.Plotter("Total Unbreakables")
-            {
-
-                @Override
-                public int getValue()
-                {
-                    return getUnbreakableManager().getCount();
-                }
-
-            });
-
-            metrics.start();
-        }
-        catch (IOException e)
-        {
-            log("Metrics did not load");
-        }
     }
 
     private void registerEvents()

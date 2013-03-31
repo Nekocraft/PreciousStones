@@ -7,21 +7,132 @@
     <version>9.5.6-SNAPSHOT</version>
     <name>PreciousStones</name>
     <url>http://dev.bukkit.org/server-mods/preciousstones/</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <bukkit.version>1.5.1-R0.1-SNAPSHOT</bukkit.version>
+    </properties>
+
+    <!-- Repository -->
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>sk89q-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
+        <!-- <repository>
+            <id>vault-repo</id>
+            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+        </repository> -->
+        <repository>
+            <id>remote-repos</id>
+            <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos</url>
+        </repository>
+        <repository>
+            <id>gravity-repo</id>
+            <url>http://repo.gravitydevelopment.net/</url>
+        </repository>
+    </repositories>
+    <!-- Dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${bukkit.version}</version>
+        </dependency>
+        <!-- mvn install:install-file -Dfile=Vault-1.2.24-SNAPSHOT.jar -DgroupId=net.milkbowl.vault -DartifactId=Vault -Dversion=1.2.24-SNAPSHOT -Dpackaging=jar -->
+        <dependency>
+          <groupId>net.milkbowl.vault</groupId>
+          <artifactId>Vault</artifactId>
+          <version>1.2.24-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nijikokun.bukkit</groupId>
+            <artifactId>Permissions</artifactId>
+            <version>2.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldguard</artifactId>
+            <version>5.6</version>
+        </dependency>
+<!-- mvn install:install-file -Dfile=PermissionsEx-1.19.5.jar -DgroupId=ru.tehkode -DartifactId=PermissionsEx -Dversion=1.19.5 -Dpackaging=jar -->
+        <dependency>
+            <groupId>ru.tehkode</groupId>
+            <artifactId>PermissionsEx</artifactId>
+            <version>1.19.5</version>
+        </dependency>
+<!-- mvn install:install-file -Dfile=CombatTag-5.8.7.jar -DgroupId=com.trc202 -DartifactId=CombatTag -Dversion=5.8.7 -Dpackaging=jar -->
+        <dependency>
+            <groupId>com.trc202</groupId>
+            <artifactId>CombatTag</artifactId>
+            <version>5.8.7</version>
+        </dependency>
+<!-- mvn install:install-file -Dfile=LWC-4.3.1.jar -DgroupId=com.griefcraft -DartifactId=LWC -Dversion=4.3.1 -Dpackaging=jar -->
+        <dependency>
+            <groupId>com.griefcraft</groupId>
+            <artifactId>LWC</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sacredlabyrinth.phaed</groupId>
+            <artifactId>simpleclans</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.platymuus</groupId>
+            <artifactId>bukkit-permissions</artifactId>
+            <version>1.5</version>
+        </dependency>
+<!-- mvn install:install-file -Dfile=AntiCheat-1.5.6.jar -DgroupId=net.h31ix.anticheat -DartifactId=AntiCheat -Dversion=1.5.6 -Dpackaging=jar -->
+        <dependency>
+            <groupId>net.h31ix.anticheat</groupId>
+            <artifactId>AntiCheat</artifactId>
+            <version>1.5.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>1.3.13-dev</version>
+        </dependency>
+<!-- mvn install:install-file -Dfile=Lockette-1.7.9.jar -DgroupId=org.yi.acru.bukkit -DartifactId=Lockette -Dversion=1.7.9 -Dpackaging=jar -->
+        <dependency>
+            <groupId>org.yi.acru.bukkit</groupId>
+            <artifactId>Lockette</artifactId>
+            <version>1.7.9</version>
+        </dependency>
+<!-- mvn install:install-file -Dfile=HawkEye-1.0.7b.jar -DgroupId=uk.co.oliwali -DartifactId=HawkEye -Dversion=1.0.7b -Dpackaging=jar -->
+        <dependency>
+            <groupId>uk.co.oliwali</groupId>
+            <artifactId>HawkEye</artifactId>
+            <version>1.0.7b</version>
+        </dependency>
+        <dependency>
+            <groupId>com.p000ison.dev.simpleclans2</groupId>
+            <artifactId>SimpleClans2</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
+        </dependency>
+    </dependencies>
 
     <build>
+        <defaultGoal>clean install</defaultGoal>
         <finalName>${project.name}</finalName>
 
         <!-- Resources -->
-
         <resources>
             <resource>
                 <targetPath>.</targetPath>
                 <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
-                    <include>language.yml</include>
+                    <include>*</include>
                 </includes>
             </resource>
         </resources>
@@ -49,7 +160,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <outputDirectory>${basedir}/out/</outputDirectory>
+                    <outputDirectory>../jars</outputDirectory>
                 </configuration>
             </plugin>
 
@@ -75,19 +186,14 @@
                             <minimizeJar>true</minimizeJar>
                             <relocations>
                                 <relocation>
-                                    <pattern>org.mcstats</pattern>
-                                    <shadedPattern>ps.org.mcstats</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.joda.time</pattern>
                                     <shadedPattern>ps.org.joda.time</shadedPattern>
                                 </relocation>
                             </relocations>
                             <artifactSet>
-                                <excludes>
-                                    <exclude>org.bukkit:bukkit</exclude>
-                                    <exclude>org.yaml:snakeyaml</exclude>
-                                </excludes>
+                                <includes>
+                                    <include>joda-time:joda-time</include>
+                                </includes>
                             </artifactSet>
                         </configuration>
                     </execution>
@@ -96,141 +202,7 @@
         </plugins>
     </build>
 
-    <!-- Dependencies -->
-
-    <dependencies>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.5.1-R0.1-SNAPSHOT</version>
-            <!--<version>1.3.2-R1.0</version>-->
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.2.19</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.nijikokun.bukkit</groupId>
-            <artifactId>Permissions</artifactId>
-            <version>2.7.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldguard</artifactId>
-            <version>5.6</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.tehkode</groupId>
-            <artifactId>PermissionsEx</artifactId>
-            <version>1.19.3</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.trc202</groupId>
-            <artifactId>CombatTag</artifactId>
-            <version>3.3</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.griefcraft</groupId>
-            <artifactId>LWC</artifactId>
-            <version>4.3.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.yi.acru.bukkit</groupId>
-            <artifactId>Lockette</artifactId>
-            <version>1.7.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sacredlabyrinth.phaed</groupId>
-            <artifactId>simpleclans</artifactId>
-            <version>2.3.3</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>uk.co.oliwali</groupId>
-            <artifactId>HawkEye</artifactId>
-            <version>1.0.7b</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.platymuus</groupId>
-            <artifactId>bukkit-permissions</artifactId>
-            <version>1.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats</groupId>
-            <artifactId>metrics</artifactId>
-            <version>1.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.gmail.nossr50.mcMMO</groupId>
-            <artifactId>mcMMO</artifactId>
-            <version>1.3.13-dev</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.h31ix.anticheat</groupId>
-            <artifactId>AntiCheat</artifactId>
-            <version>1.5.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.p000ison.dev.simpleclans2</groupId>
-            <artifactId>SimpleClans2</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
-    <!-- Repository -->
-
-    <repositories>
-        <repository>
-            <id>remote-repos</id>
-            <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos</url>
-        </repository>
-        <repository>
-            <id>gravity-repo</id>
-            <url>http://repo.gravitydevelopment.net/</url>
-        </repository>
-    </repositories>
-
-    <!-- GitHub/Jenkins -->
-
-    <ciManagement>
-        <system>jenkins</system>
-        <url>http://sacredlabyrinth.net:8080</url>
-    </ciManagement>
-
-    <scm>
-        <connection>scm:git:git:@github.com:SacredCoding/PreciousStones.git</connection>
-        <developerConnection>scm:git:git:@github.com:SacredCoding/PreciousStones.git</developerConnection>
-        <url>http://github.com/SacredCoding/PreciousStones.git/tree/master/</url>
-      <tag>PreciousStones-9.5.1</tag>
-  </scm>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <!-- Upstream Distribution -->
-
     <distributionManagement>
         <repository>
             <id>SacredCoding</id>

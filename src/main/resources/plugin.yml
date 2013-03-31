@@ -1,4 +1,4 @@
-name: PreciousStones
+name: 守护之石
 author: Phaed
 main: net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones
 version: ${project.version}
@@ -7,258 +7,258 @@ load: 'postworld'
 softdepend: [Permissions, PermissionsBukkit, SimpleClans, HawkEye, Vault, CombatTag, WorldGuard, LWC, Lockette, Spout, mcMMO, SCCore]
 commands:
   ps:
-    description: All of the PreciousStones commands
-    usage: Command not recognized
+    description: 所有守护之石的指令
+    usage: 未确认命令
 permissions:
   preciousstones.benefit.fields:
-    description: Can use /ps fields
+    description: 能使用 /ps fields 设置领域
   preciousstones.benefit.create.forcefield:
-    description: Can create forcefield blocks
+    description: 能创建力场领域
   preciousstones.benefit.create.unbreakable:
-    description: Can create unbreakable blocks
+    description: 能创建守护领域
   preciousstones.benefit.disable:
-    description: Can disable his own fields
+    description: 能禁用拥有的领域
   preciousstones.benefit.enable:
-    description: Can enable his own fields
+    description: 能启用拥有的领域
   preciousstones.benefit.heal:
-    description: Can be healed in healing zones
+    description: 在治疗范围内能被治愈
   preciousstones.benefit.giveair:
-    description: Can be get air in air zones
+    description: 在氧气范围内能得到氧气
   preciousstones.benefit.launch:
-    description: Can use launch fields
+    description: 能设置发射
   preciousstones.benefit.bounce:
-    description: Can use bounce fields
+    description: 能设置弹跳
   preciousstones.benefit.setname:
-    description: Can use /ps setname
+    description: 能使用 /ps setname
   preciousstones.benefit.setradius:
-    description: Can use /ps setradius
+    description: 能使用 /ps setradius
   preciousstones.benefit.setvelocity:
-    description: Can use /ps setvelocity
+    description: 能使用 /ps setvelocity
   preciousstones.benefit.setinterval:
-    description: Can use /ps setinterval
+    description: 能使用 /ps setinterval
   preciousstones.benefit.mark:
-    description: Can use /ps mark
+    description: 能使用 /ps mark
   preciousstones.benefit.visualize:
-    description: Can use /ps visualize
+    description: 能使用 /ps visualize
   preciousstones.benefit.who:
-    description: Can use /ps who
+    description: 能使用 /ps who
   preciousstones.benefit.onoff:
-    description: Can use /ps on and /ps off
+    description: 能使用 /ps on and /ps off
   preciousstones.benefit.counts:
-    description: Can use /ps counts
+    description: 能使用 /ps counts
   preciousstones.benefit.locations:
-    description: Can use /ps locations
+    description: 能使用 /ps locations
   preciousstones.benefit.snitch:
-    description: Can use /ps snitch list/clean
+    description: 能使用 /ps snitch list/clean
   preciousstones.benefit.feed:
-    description: Can get feed by feed block
+    description: 可以得到饥饿度在食物方块
   preciousstones.benefit.potions:
-    description: Will speed up in fast blocks
+    description: 可以加速在加速方块
   preciousstones.benefit.repair:
-    description: Can get rapired by feed block
+    description: 能通过材料修复
   preciousstones.benefit.toggle:
-    description: Can use /ps toggle
+    description: 能使用 /ps toggle
   preciousstones.benefit.density:
-    description: Can set the visualization density
+    description: 能设置可视化密度
   preciousstones.benefit.change-owner:
-    description: Can change the owner to their own fields
+    description: 可以更改领域的所有者
   preciousstones.benefit.hide:
-    description: Can hide/unhide his fields
+    description: 可以控制领域是否隐藏
   preciousstones.benefit.setlimit:
-    description: Can set renting limits
+    description: 可设置租赁限制
   preciousstones.admin.hideall:
-    description: Can hide/unhide all of his fields
+    description: 可以控制全部领域是否隐藏
   preciousstones.whitelist.allow:
-    description: Can use /ps allow
+    description: 能使用 /ps allow (设置白名单)
   preciousstones.whitelist.allowed:
-    description: Can use /ps allowed
+    description: 能使用 /ps allowed
   preciousstones.whitelist.allowall:
-    description: Can use /ps allowall
+    description: 能使用 /ps allowall
   preciousstones.whitelist.remove:
-    description: Can use /ps remove
+    description: 能使用 /ps remove
   preciousstones.whitelist.removeall:
-    description: Can use /ps removeall
+    description: 能使用 /ps removeall
   preciousstones.bypass.purchase:
-    description: Can place fields without purchasing them
+    description: 可放置领域，而无需购买
   preciousstones.bypass.entry:
-    description: Can enter entry-protected fields
+    description: 可以进入入门保护等领域
   preciousstones.bypass.pvp:
-    description: Can hit peple in pvp free fields
+    description: 在PVP自由领域能够攻击玩家
   preciousstones.bypass.place:
-    description: Can place blocks in place-protected fields
+    description: 可以放置方块在禁止放置区域
   preciousstones.bypass.use:
-    description: Canuse blocks in use-protected fields
+    description: 可以放置物品在禁止使用区域
   preciousstones.bypass.destroy:
-    description: Can destroy blocks in destroy-protected fields
+    description: 可以破坏方块在禁止破坏区域
   preciousstones.bypass.protection:
-    description: Can break other peoples protection blocks
+    description: 可以破坏其他玩家的保护方块
   preciousstones.bypass.unbreakable:
-    description: Can break other peoples unbreakable blocks
+    description: 可以破坏其他玩家的不可破坏方块
   preciousstones.bypass.unprotectable:
-    description: Can protect unprotectable blocks
+    description: 可以保护不受保护的块
   preciousstones.bypass.snitch:
-    description: Wont show up on any snitch lists
+    description: 不会出现任何报告列表
   preciousstones.bypass.damage:
-    description: Wont show up on any snitch lists
+    description: 不会出现任何报告列表
   preciousstones.bypass.setradius:
-    description: Can set larger radius than the limit
+    description: 可以设置比限制更大的半径
   preciousstones.bypass.no-allowing:
-    description: Can add players to allowed lists
+    description: 可以被添加到允许列表
   preciousstones.bypass.mine:
-    description: Bypasses proximity mine
+    description: 不触发地雷领域
   preciousstones.bypass.lightning:
-    description: Bypasses lightning fields
+    description: 不触发雷击领域
   preciousstones.bypass.limits:
-    description: Bypasses limits
+    description: 不受限制
   preciousstones.bypass.cuboid:
-    description: Bypasses cuboid size limits
+    description: 不受区域的大小限制
   preciousstones.bypass.interval:
-    description: Bypasses interval configured minimum
+    description: 不受最小间隔配置限制
   preciousstones.bypass.teleport:
-    description: Bypasses teleport block
+    description: 不受传送方块影响
   preciousstones.bypass.world:
-    description: Bypasses world limitation
+    description: 不受世界限制影响
   preciousstones.bypass.allowed-only-inside:
-    description: Bypasses allowed only inside restriction
+    description: 不受内部限制影响
   preciousstones.bypass.allowed-only-outside:
-    description: Bypasses allowed only outside restriction
+    description: 不受外部限制影响
   preciousstones.bypass.on-disabled:
-    description: Bypasses on-disabled flags
+    description: 不受已禁用标志影响
   preciousstones.bypass.entryalert:
-    description: Bypasses entry alert messages
+    description: 不触发进入警报消息
   preciousstones.bypass.teleport:
-    description: Bypasses teleport flags
+    description: 不受传送标志影响
   preciousstones.bypass.toggle:
-    description: Can toggle bypass mode
+    description: 可以切换不受影响的模式
   preciousstones.bypass.commandblacklist:
-    description: Can toggle bypass mode
+    description: 可以不受指令黑名单的影响
   preciousstones.bypass.item-frame-take:
-    description: Can toggle bypass mode
+    description: 可以不受禁止拿走物品展示柜效果的影响
   preciousstones.bypass.entity-interact:
-    description: Can bypass interaction with entity protections
+    description: 可以不受实体互动保护影响
   preciousstones.alert.notify.place:
-    description: Gets alert for block placement notifys
+    description: 可以获取方块放置通知
   preciousstones.alert.notify.destroy:
-    description: Gets alert for block destroy notifys
+    description: 可以获取方块摧毁通知
   preciousstones.alert.notify.bypass-place:
-    description: Gets alert for block bypass-place notifys
+    description: 可以获取方块的强制放置通知
   preciousstones.alert.notify.bypass-destroy:
-    description: Gets alert for block bypass-destroy notifys
+    description: 可以获取方块的强制破坏通知
   preciousstones.alert.warn.entry:
-    description: Gets alert for entry warnings
+    description: 可以获取闯入警告
   preciousstones.alert.warn.fire:
-    description: Gets alert for fire warnings
+    description: 可以获取火灾警告
   preciousstones.alert.warn.pvp:
-    description: Gets alert for pvp warnings
+    description: 可以获取PVP警告
   preciousstones.alert.warn.use:
-    description: Gets alert for use warnings
+    description: 可以获取物品使用警告
   preciousstones.alert.warn.place:
-    description: Gets alert for place warnings
+    description: 可以获取方块放置警告
   preciousstones.alert.warn.destroy:
-    description: Gets alert for destroy warnings
+    description: 可以获取方块破坏警告
   preciousstones.alert.warn.noplace:
-    description: Gets alert for noplace warnings
+    description: 可以获取放置空间不足的警告
   preciousstones.alert.warn.destroyarea:
-    description: Gets alert for destroy area warnings
+    description: 可以获取警报范围破坏警告
   preciousstones.alert.warn.conflict:
-    description: Gets alert for conflict placement warnings
+    description: 可以获取放置冲突警告
   preciousstones.alert.warn.unprotectable:
-    description: Gets alert for unprotectable related warnings
+    description: 可以获取不受保护的相关警告
   preciousstones.admin.disableall:
-    description: Can disable all flags in a field
+    description: 可以禁用所有的标志
   preciousstones.admin.enableall:
-    description: Can enable all flags in a field
+    description: 可以启用所有的标志
   preciousstones.admin.superduperpickaxe:
-    description: Can use superduperpickaxe
+    description: 能使用 superduperpickaxe
   preciousstones.admin.mark:
-    description: Can use /ps mark (Can mark everyone's fields)
+    description: 能使用 /ps mark (标记任何人的领域)
   preciousstones.admin.visualize:
-    description: Can use /ps visualize (Can visualize everyone's fields)
+    description: 能使用 /ps visualize (可以查看所有人的领域)
   preciousstones.admin.allowed:
-    description: Allows the player in everyone elses fields
+    description: 能允许玩家在任何人的领域中
   preciousstones.admin.undo:
-    description: Can trigger anyone's undo grief blocks
+    description: 可以撤销任何人放置的危险方块
   preciousstones.admin.delete:
-    description: Can use /ps delete
+    description: 能使用 /ps delete
   preciousstones.admin.info:
-    description: Can use /ps info
+    description: 能使用 /ps info
   preciousstones.admin.list:
-    description: Can use /ps list
+    description: 能使用 /ps list
   preciousstones.admin.reload:
-    description: Can use /ps reload
+    description: 能使用 /ps reload
   preciousstones.admin.setowner:
-    description: Can use /ps setowner
+    description: 能使用 /ps setowner
   preciousstones.admin.clean:
-    description: Can use /ps clean
+    description: 能使用 /ps clean
   preciousstones.admin.revert:
-    description: Can use /ps revert
+    description: 能使用 /ps revert
   preciousstones.admin.details:
-    description: Can view all details with right-click
+    description: 可以用鼠标右键单击查看所有细节
   preciousstones.admin.bypass.log:
-    description: User does not show up in logs
+    description: 用户不会被日志记录
   preciousstones.admin.viewconflicting:
-    description: Tells you locations of conflicting pstones when placing new field
+    description: 告诉你的位置冲突的守护之石的新领域
   preciousstones.admin.insert:
-    description: Can use /ps insert
+    description: 能使用 /ps insert
   preciousstones.admin.reset:
-    description: Can use /ps reset
+    description: 能使用 /ps reset
   preciousstones.admin.isadmin:
-    description: Can used internally to detect admins
+    description: 可检测管理员
   preciousstones.admin.counts:
-    description: Gives you the counts of pstones each player hass
+    description: 可以统计每个玩家拥有的守护之石
   preciousstones.admin.locations:
-    description: Gives you the locations of pstones each player hass
+    description: 可以统计玩家拥有的守护之石的位置
   preciousstones.admin.rent:
-    description: Lets admins use rent admin powers for renting
+    description: 让管理员使用用于出租的租金管理权力
   preciousstones.override.notify:
-    description: Can users will not be shown any notifications
+    description: 用户将不会显示任何通知
   preciousstones.override.warn:
-    description: Can users will not be shown any warnings
+    description: 用户将不会显示任何警告
   preciousstones.translocation.use:
-    description: Can use translocation fields
+    description: 能使用转移领域
   preciousstones.translocation.delete:
-    description: Can delete translocation fields
+    description: 可以删除易位领域
   preciousstones.translocation.remove:
-    description: Can remove specific block types form their translocations
+    description: 可以在自己的易位领域删除特定的块
   preciousstones.translocation.import:
-    description: Can import into translocation fields
+    description: 可以导入易位领域
   preciousstones.translocation.unlink:
-    description: Can unlink a translocation
+    description: 可以断开链接的易位
   preciousstones.manual.bypass.potions:
-    description: bypasses potion effects
+    description: 可以不受药水效果影响
   preciousstones.limit1:
-    description: Limit 1
+    description: 限制等级1
   preciousstones.limit2:
-    description: Limit 2
+    description: 限制等级2
   preciousstones.limit3:
-    description: Limit 3
+    description: 限制等级3
   preciousstones.limit4:
-    description: Limit 4
+    description: 限制等级4
   preciousstones.limit5:
-    description: Limit 5
+    description: 限制等级5
   preciousstones.limit6:
-    description: Limit 6
+    description: 限制等级6
   preciousstones.limit7:
-    description: Limit 7
+    description: 限制等级7
   preciousstones.limit8:
-    description: Limit 8
+    description: 限制等级8
   preciousstones.limit9:
-    description: Limit 9
+    description: 限制等级9
   preciousstones.limit10:
-    description: Limit 10
+    description: 限制等级10
   preciousstones.limit11:
-    description: Limit 11
+    description: 限制等级11
   preciousstones.limit12:
-    description: Limit 12
+    description: 限制等级12
   preciousstones.limit13:
-    description: Limit 13
+    description: 限制等级13
   preciousstones.limit14:
-    description: Limit 14
+    description: 限制等级14
   preciousstones.limit15:
-    description: Limit 15
+    description: 限制等级15
   preciousstones.benefit.*:
     default: false
-    description: Can use PreciousStones
+    description: 能使用PreciousStones
     children:
       preciousstones.benefit.fields: true
       preciousstones.benefit.create.forcefield: true
@@ -289,7 +289,7 @@ permissions:
       preciousstones.benefit.hide: true
       preciousstones.benefit.setlimit: true
   preciousstones.whitelist.*:
-    description: Can whitelist others into fields
+    description: 可以给领域增加白名单
     default: false
     children:
       preciousstones.whitelist.allow: true
@@ -307,7 +307,7 @@ permissions:
       preciousstones.translocation.remove: true
       preciousstones.translocation.unlink: true
   preciousstones.bypass.*:
-    description: Permissions for moderators
+    description: 巡查员权限
     default: op
     children:
       preciousstones.bypass.toggle: true
@@ -340,7 +340,7 @@ permissions:
       preciousstones.bypass.commandblacklist: true
       preciousstones.bypass.entity-interact: true
   preciousstones.alert.*:
-    description: Receives in-game alert on notifys and warnings (mods)
+    description: 获得在游戏中的提示，通知和警告 (巡查员)
     default: false
     children:
       preciousstones.alert.notify.place: true
@@ -358,7 +358,7 @@ permissions:
       preciousstones.alert.warn.conflict: true
       preciousstones.alert.warn.unprotectable: true
   preciousstones.admin.*:
-    description: Permissions for admins
+    description: 管理员权限
     default: op
     children:
       preciousstones.admin.mark: true
@@ -385,7 +385,7 @@ permissions:
       preciousstones.admin.hideall: true
       preciousstones.admin.rent: true
   preciousstones.override.*:
-    description: These players will receive no warnings or notifications
+    description: 这些玩家将不会收到任何警告或通知
     default: false
     children:
       preciousstones.override.notify: true
