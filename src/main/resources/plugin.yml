@@ -1,4 +1,4 @@
-name: 守护之石
+name: PreciousStones
 author: Phaed
 main: net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones
 version: ${project.version}
