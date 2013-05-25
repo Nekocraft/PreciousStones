@@ -335,7 +335,7 @@ public class CuboidManager
 
             plugin.getForceFieldManager().addSourceField(field);
             plugin.getForceFieldManager().addAllowOverlappingOwners(field);
-            plugin.getVisualizationManager().visualizeSingleFieldFast(player, field);
+            plugin.getVisualizationManager().visualizeSingleField(player, field);
             plugin.getStorageManager().offerField(field);
             plugin.getCommunicationManager().notifyPlaceCuboid(player, field);
             return true;
@@ -398,8 +398,12 @@ public class CuboidManager
     {
         plugin.getVisualizationManager().revert(player);
         plugin.getVisualizationManager().revertOutline(player);
-        openCuboids.remove(player.getName());
-        ChatBlock.send(player, "cuboidCancelled");
+
+        if (openCuboids.containsKey(player.getName()))
+        {
+            openCuboids.remove(player.getName());
+            ChatBlock.send(player, "cuboidCancelled");
+        }
     }
 
     /**

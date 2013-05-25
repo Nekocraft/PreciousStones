@@ -68,7 +68,7 @@ public class PSPlayerListener implements Listener
         {
             if (FieldFlag.COMMAND_BLACKLIST.applies(field, player))
             {
-                if(field.getSettings().isCanceledCommand(event.getMessage()))
+                if (field.getSettings().isCanceledCommand(event.getMessage()))
                 {
                     if (!plugin.getPermissionsManager().has(player, "preciousstones.bypass.commandblacklist"))
                     {
@@ -926,17 +926,6 @@ public class PSPlayerListener implements Listener
         {
             if (plugin.getCuboidManager().hasOpenCuboid(player))
             {
-                if (player.isSneaking())
-                {
-                    // handle cuboid undo
-
-                    if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-                    {
-                        plugin.getCuboidManager().revertLastSelection(player);
-                        return;
-                    }
-                }
-
                 // handle cuboid expand
 
                 if (event.getAction().equals(Action.RIGHT_CLICK_AIR))
@@ -961,6 +950,7 @@ public class PSPlayerListener implements Listener
 
                     if (player.isSneaking())
                     {
+                        event.setCancelled(true);
                         plugin.getCuboidManager().closeCuboid(player);
                         return;
                     }
@@ -969,6 +959,7 @@ public class PSPlayerListener implements Listener
 
                     if (plugin.getCuboidManager().isOpenCuboid(player, target))
                     {
+                        event.setCancelled(true);
                         plugin.getCuboidManager().closeCuboid(player);
                         return;
                     }
@@ -1090,6 +1081,7 @@ public class PSPlayerListener implements Listener
                                             }
                                         }
 
+                                        event.setCancelled(true);
                                         plugin.getCuboidManager().openCuboid(player, field);
                                     }
                                     return;
@@ -1302,12 +1294,19 @@ public class PSPlayerListener implements Listener
 
             if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
-                if (block.getType().equals(Material.WALL_SIGN))
+                if (block.getTypeId() == 68) // wall sign
                 {
                     plugin.getSnitchManager().recordSnitchShop(player, block);
                 }
 
-                if (block.getType().equals(Material.WORKBENCH) || block.getType().equals(Material.BED) || block.getType().equals(Material.WOODEN_DOOR) || block.getType().equals(Material.LEVER) || block.getType().equals(Material.MINECART) || block.getType().equals(Material.NOTE_BLOCK) || block.getType().equals(Material.JUKEBOX) || block.getType().equals(Material.STONE_BUTTON))
+                if (block.getTypeId() == 58 || // workbench
+                        block.getTypeId() == 355 || // bed
+                        block.getTypeId() == 64 || //wood door
+                        block.getTypeId() == 69 ||  //lever
+                        block.getTypeId() == 328 ||  // cart
+                        block.getTypeId() == 28 ||  /// note
+                        block.getTypeId() == 84 || // juke
+                        block.getTypeId() == 77) // button
                 {
                     plugin.getSnitchManager().recordSnitchUsed(player, block);
                 }
@@ -1358,9 +1357,12 @@ public class PSPlayerListener implements Listener
 
                             if (!field.getSettings().getRequiredPermissionUse().isEmpty())
                             {
-                                if (!plugin.getPermissionsManager().has(player, field.getSettings().getRequiredPermissionUse()))
+                                if (!plugin.getPermissionsManager().has(player, "preciousstones.bypass.required-permission"))
                                 {
-                                    return;
+                                    if (!plugin.getPermissionsManager().has(player, field.getSettings().getRequiredPermissionUse()))
+                                    {
+                                        return;
+                                    }
                                 }
                             }
 
@@ -1370,9 +1372,7 @@ public class PSPlayerListener implements Listener
                             {
                                 if (field.getNewOwner().equalsIgnoreCase(player.getName()))
                                 {
-                                    PreciousStones plugin = PreciousStones.getInstance();
-
-                                    PreciousStones.getInstance().getStorageManager().changeTranslocationOwner(field, field.getNewOwner());
+                                    plugin.getStorageManager().changeTranslocationOwner(field, field.getNewOwner());
 
                                     String oldOwnerName = field.getOwner();
 
@@ -1380,7 +1380,7 @@ public class PSPlayerListener implements Listener
 
                                     plugin.getStorageManager().offerPlayer(field.getOwner());
                                     plugin.getStorageManager().offerPlayer(oldOwnerName);
-                                    PreciousStones.getInstance().getStorageManager().offerField(field);
+                                    plugin.getStorageManager().offerField(field);
 
                                     ChatBlock.send(player, "takenFieldOwnership", oldOwnerName);
 

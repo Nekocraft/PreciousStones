@@ -1,7 +1,7 @@
 package net.sacredlabyrinth.Phaed.PreciousStones;
 
+import net.sacredlabyrinth.Phaed.PreciousStones.api.Api;
 import net.sacredlabyrinth.Phaed.PreciousStones.api.IApi;
-import net.sacredlabyrinth.Phaed.PreciousStones.api.facade;
 import net.sacredlabyrinth.Phaed.PreciousStones.listeners.*;
 import net.sacredlabyrinth.Phaed.PreciousStones.managers.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -97,7 +97,7 @@ public class PreciousStones extends JavaPlugin
      */
     public static void log(Level level, Object msg, Object... arg)
     {
-        logger.log(level, new StringBuilder().append("[PreciousStones] ").append(ChatBlock.format(msg.toString(), arg)).toString());
+        logger.log(level, "[PreciousStones] " + ChatBlock.format(msg.toString(), arg));
     }
 
     /**
@@ -165,7 +165,7 @@ public class PreciousStones extends JavaPlugin
             lwcListener = new LWCListener();
         }
 
-        api = new facade();
+        api = new Api();
 
         registerEvents();
         registerCommands();

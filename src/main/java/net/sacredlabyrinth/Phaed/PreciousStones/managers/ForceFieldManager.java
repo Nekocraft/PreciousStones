@@ -737,14 +737,11 @@ public final class ForceFieldManager
     {
         Collection<Field> fields = fieldsByVec.values();
 
-        if (fields != null)
+        for (Field field : fields)
         {
-            for (Field field : fields)
+            if (field.isDirty())
             {
-                if (field.isDirty())
-                {
-                    plugin.getStorageManager().offerField(field);
-                }
+                plugin.getStorageManager().offerField(field);
             }
         }
     }
@@ -906,9 +903,9 @@ public final class ForceFieldManager
             return false;
         }
 
-        Material topmat = block.getRelative(BlockFace.UP).getType();
+        int topId = block.getRelative(BlockFace.UP).getTypeId();
 
-        if (topmat.equals(Material.STONE_PLATE) || topmat.equals(Material.WOOD_PLATE))
+        if (topId == 70 || topId == 72) // plates
         {
             return true;
         }
@@ -918,23 +915,24 @@ public final class ForceFieldManager
         for (BlockFace face : faces)
         {
             Block faceblock = block.getRelative(face);
+            int faceId = faceblock.getTypeId();
 
-            if (faceblock.getType().equals(Material.REDSTONE_TORCH_OFF))
+            if (faceId == 75)  // redstone torch
             {
                 return true;
             }
 
-            if (faceblock.getType().equals(Material.STONE_BUTTON))
+            if (faceId == 77) // stone button
             {
                 return true;
             }
 
-            if (faceblock.getType().equals(Material.LEVER) && faceblock.getBlockPower() == 0)
+            if (faceId == 69 /* lever */ && faceblock.getBlockPower() == 0)
             {
                 return true;
             }
 
-            if (faceblock.getType().equals(Material.REDSTONE_WIRE) && faceblock.getBlockPower() == 0)
+            if (faceId == 55 /* redstone wire */ && faceblock.getBlockPower() == 0)
             {
                 return true;
             }
@@ -947,8 +945,9 @@ public final class ForceFieldManager
         for (BlockFace face : upfaces)
         {
             Block faceblock = upblock.getRelative(face);
+            int faceId = faceblock.getTypeId();
 
-            if (faceblock.getType().equals(Material.REDSTONE_WIRE) && faceblock.getBlockPower() == 0)
+            if (faceId == 55 /* redstone wire */ && faceblock.getBlockPower() == 0)
             {
                 return true;
             }
@@ -1014,7 +1013,7 @@ public final class ForceFieldManager
         {
             Block source = block.getRelative(face);
 
-            if (source.getType().equals(Material.REDSTONE_WIRE))
+            if (source.getTypeId() == 55) // redstone wire
             {
                 if (source.getBlockPower() > 0)
                 {
@@ -1031,7 +1030,7 @@ public final class ForceFieldManager
         {
             Block faceblock = upblock.getRelative(face);
 
-            if (faceblock.getType().equals(Material.REDSTONE_WIRE))
+            if (faceblock.getTypeId() == 55) // redstone wire
             {
                 if (faceblock.getBlockPower() > 0)
                 {
@@ -1191,28 +1190,26 @@ public final class ForceFieldManager
      * Whether the player is allowed in the field
      *
      * @param field
-     * @param playerName
+     * @param target
      * @return
      */
-    public boolean isAllowed(Field field, String playerName)
+    public boolean isAllowed(Field field, String target)
     {
-        if (field == null || playerName == null)
+        if (field == null || target == null)
         {
             return false;
         }
 
-        Player player = Bukkit.getServer().getPlayerExact(playerName);
+        Player player = Bukkit.getServer().getPlayerExact(target);
 
-        if (player == null)
+        if (player != null)
         {
-            return false;
-        }
+            // allow if admin
 
-        // allow if admin
-
-        if (plugin.getPermissionsManager().has(player, "preciousstones.admin.allowed"))
-        {
-            return true;
+            if (plugin.getPermissionsManager().has(player, "preciousstones.admin.allowed"))
+            {
+                return true;
+            }
         }
 
         // false if settings missing
@@ -1226,34 +1223,37 @@ public final class ForceFieldManager
 
         if (!field.getSettings().getRequiredPermissionAllow().isEmpty())
         {
-            if (!plugin.getPermissionsManager().has(player, field.getSettings().getRequiredPermissionAllow()))
+            if (!plugin.getPermissionsManager().has(player, "preciousstones.bypass.required-permission"))
             {
-                return false;
+                if (!plugin.getPermissionsManager().has(player, field.getSettings().getRequiredPermissionAllow()))
+                {
+                    return false;
+                }
             }
         }
 
         // allow if in global allowed list
 
-        if (field.getSettings().inAllowedList(playerName))
+        if (field.getSettings().inAllowedList(target))
         {
             return true;
         }
 
         // allow if in global deny list
 
-        if (field.getSettings().inDeniedList(playerName))
+        if (field.getSettings().inDeniedList(target))
         {
             return false;
         }
 
         // always allow if in war
 
-        if (plugin.getSimpleClansManager().inWar(field, playerName))
+        if (plugin.getSimpleClansManager().inWar(field, target))
         {
             return true;
         }
 
-        return field.isAllowed(playerName);
+        return field.isAllowed(target);
     }
 
     /**
@@ -1311,7 +1311,6 @@ public final class ForceFieldManager
         if (field.isInAllowedList(target))
         {
             field.removeAllowed(target);
-
             plugin.getStorageManager().offerField(field);
             return true;
         }
@@ -1426,10 +1425,10 @@ public final class ForceFieldManager
      * Remove allowed player to all your force fields
      *
      * @param player
-     * @param allowedName
+     * @param target
      * @return count of fields the player was removed from
      */
-    public int removeAll(Player player, String allowedName)
+    public int removeAll(Player player, String target)
     {
         List<Field> fields = getOwnersFields(player, FieldFlag.ALL);
 
@@ -1438,7 +1437,7 @@ public final class ForceFieldManager
 
         for (Field field : fields)
         {
-            if (field.containsPlayer(allowedName))
+            if (field.containsPlayer(target))
             {
                 ChatBlock.send(player, "playerInsideNotRemoved");
                 continue;
@@ -1456,15 +1455,15 @@ public final class ForceFieldManager
                 }
             }
 
-            if (conflictOfInterestExists(field, allowedName))
+            if (conflictOfInterestExists(field, target))
             {
-                ChatBlock.send(player, "playerNotDisallowed", allowedName, field);
+                ChatBlock.send(player, "playerNotDisallowed", target, field);
                 continue;
             }
 
-            if (isAllowed(field, allowedName))
+            if (isAllowed(field, target))
             {
-                field.removeAllowed(allowedName);
+                field.removeAllowed(target);
                 removedCount++;
             }
             plugin.getStorageManager().offerField(field);
@@ -1604,7 +1603,7 @@ public final class ForceFieldManager
             PreciousStones.debug("absoluteSmallest: %s", absoluteSmallest.getType());
         }
 
-        // find absolute smallest
+        // find absolute smallest (regardless of whether it contains the queried flag or not)
 
         if (absoluteSmallest != null)
         {
@@ -1668,6 +1667,11 @@ public final class ForceFieldManager
 
         for (Field smallest : fields)
         {
+            if (smallest.hasFlag(FieldFlag.ANTI_PLOT))
+            {
+                continue;
+            }
+
             if (smallest.getActualVolume() > 1 && smallest.getComputedHeight() > 1)
             {
                 return smallest;
@@ -1734,16 +1738,27 @@ public final class ForceFieldManager
         {
             public boolean Filter(Field field)
             {
-                if (field.hasFlag(FieldFlag.DISABLE_WHEN_ONLINE))
-                {
-                    return !field.hasOnlineAllowed();
-                }
+                return !field.hasFlag(FieldFlag.DISABLE_WHEN_ONLINE) || !field.hasOnlineAllowed();
 
-                return true;
             }
         };
 
-        return getSourceFieldsInChunk(new ChunkVec(loc.getChunk()), flag, envelopsFilter, disabledFlagFilter, notDisabledFilter, disableIfOnlineFilter);
+        Chunk c = null;
+        try
+        {
+            c = loc.getChunk();
+        }
+        catch (Exception e)
+        {
+            // some weird stuffs going on
+        }
+
+        if (c == null)
+        {
+            return new ArrayList<Field>();
+        }
+
+        return getSourceFieldsInChunk(new ChunkVec(c), flag, envelopsFilter, disabledFlagFilter, notDisabledFilter, disableIfOnlineFilter);
     }
 
     /**
@@ -2530,7 +2545,7 @@ public final class ForceFieldManager
     {
         // prevent tekkit blocks from dropping and crashing client
 
-        if (block.getTypeId() > 124)
+        if (block.getTypeId() > 255)
         {
             return;
         }
@@ -2961,6 +2976,7 @@ public final class ForceFieldManager
                         if (!plugin.getPermissionsManager().has(player, permission))
                         {
                             queueRelease(field);
+                            deletedCount++;
                         }
                     }
                 }
@@ -2972,5 +2988,24 @@ public final class ForceFieldManager
                 }
             }
         }
+    }
+
+    /**
+     * Return all of a player's fields, by type
+     *
+     * @param playerName
+     * @param flag
+     * @return
+     */
+    public List<Field> getPlayerFields(String playerName, FieldFlag flag)
+    {
+        Map<FieldFlag, List<Field>> fields = fieldsByOwnerAndFlag.get(playerName);
+
+        if (fields == null)
+        {
+            return null;
+        }
+
+        return fields.get(flag);
     }
 }

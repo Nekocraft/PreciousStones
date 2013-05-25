@@ -4,53 +4,112 @@
 
     <groupId>net.sacredlabyrinth.Phaed</groupId>
     <artifactId>PreciousStones</artifactId>
-    <version>9.5.7-SNAPSHOT</version>
+    <version>9.5.8-SNAPSHOT</version>
     <name>PreciousStones</name>
     <url>http://dev.bukkit.org/server-mods/preciousstones/</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.5.1-R0.1-SNAPSHOT</bukkit.version>
-    </properties>
 
-    <!-- Repository -->
-    <repositories>
-        <!-- <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-        <repository>
-            <id>vault-repo</id>
-            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-        </repository>
-        <repository>
-            <id>neko-repo</id>
-            <url>http://ci.nekocraft.com/plugin/repository/everything/</url>
-        </repository> -->
-        <repository>
-            <id>remote-repos</id>
-            <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos</url>
-        </repository>
-        <repository>
-            <id>gravity-repo</id>
-            <url>http://repo.gravitydevelopment.net/</url>
-        </repository>
-    </repositories>
+    <build>
+        <finalName>${project.name}</finalName>
+
+        <!-- Resources -->
+
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                    <include>config.yml</include>
+                    <include>language.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <!-- Plugins -->
+
+        <plugins>
+            <!-- Compilation plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+
+            <!-- JAR creation plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <outputDirectory>${basedir}/out/</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <!-- Release plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.3.2</version>
+            </plugin>
+
+            <!-- Shade plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.mcstats</pattern>
+                                    <shadedPattern>ps.org.mcstats</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.joda.time</pattern>
+                                    <shadedPattern>ps.org.joda.time</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.bukkit:bukkit</exclude>
+                                    <exclude>org.yaml:snakeyaml</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <!-- Dependencies -->
+
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>${bukkit.version}</version>
+            <!--<version>1.4.7-R1.0</version>-->
+            <version>1.5.2-R0.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.2.19</version>
+            <version>1.2.25</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -139,78 +198,39 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <defaultGoal>clean install</defaultGoal>
-        <finalName>${project.name}</finalName>
+    <!-- Repository -->
 
-        <!-- Resources -->
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>*</include>
-                </includes>
-            </resource>
-        </resources>
+    <repositories>
+        <repository>
+            <id>remote-repos</id>
+            <url>http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos</url>
+        </repository>
+        <repository>
+            <id>gravity-repo</id>
+            <url>http://repo.gravitydevelopment.net/</url>
+        </repository>
+    </repositories>
 
-        <!-- Plugins -->
+    <!-- GitHub/Jenkins -->
 
-        <plugins>
-            <!-- Compilation plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <fork>true</fork>
-                </configuration>
-            </plugin>
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://sacredlabyrinth.net:8080</url>
+    </ciManagement>
 
-            <!-- Release plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.3.2</version>
-            </plugin>
+    <scm>
+        <connection>scm:git:git:@github.com:SacredCoding/PreciousStones.git</connection>
+        <developerConnection>scm:git:git:@github.com:SacredCoding/PreciousStones.git</developerConnection>
+        <url>http://github.com/SacredCoding/PreciousStones.git/tree/master/</url>
+      <tag>PreciousStones-9.5.1</tag>
+  </scm>
 
-            <!-- Shade plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.joda.time</pattern>
-                                    <shadedPattern>ps.org.joda.time</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <artifactSet>
-                                <includes>
-                                    <include>joda-time:joda-time</include>
-                                </includes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <!-- Upstream Distribution -->
+
     <distributionManagement>
         <repository>
             <id>SacredCoding</id>

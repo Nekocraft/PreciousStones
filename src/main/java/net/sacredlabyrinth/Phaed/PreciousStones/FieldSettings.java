@@ -258,6 +258,7 @@ public class FieldSettings
         loadBoolean("protect-crops");
         loadBoolean("protect-mobs");
         loadBoolean("protect-lwc");
+        loadBoolean("protect-inventories");
         loadBoolean("remove-mob");
         loadBoolean("worldguard-repellent");
         loadBoolean("breakable");
@@ -333,6 +334,7 @@ public class FieldSettings
         loadBoolean("buyable");
         loadBoolean("rentable");
         loadBoolean("command-blacklisting");
+        loadBoolean("anti-plot");
 
         requiredPermission = loadString("required-permission");
         requiredPermissionUse = loadString("required-permission-use");

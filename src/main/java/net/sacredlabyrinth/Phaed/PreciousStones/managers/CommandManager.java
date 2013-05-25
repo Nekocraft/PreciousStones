@@ -7,7 +7,6 @@ import net.sacredlabyrinth.Phaed.PreciousStones.entries.PlayerEntry;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Unbreakable;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -155,10 +154,13 @@ public final class CommandManager implements CommandExecutor
 
                                     if (!field.getSettings().getRequiredPermissionAllow().isEmpty())
                                     {
-                                        if (!plugin.getPermissionsManager().has(allowed, field.getSettings().getRequiredPermissionAllow()))
+                                        if (!plugin.getPermissionsManager().has(player, "preciousstones.bypass.required-permission"))
                                         {
-                                            ChatBlock.send(sender, "noPermsForAllow", playerName);
-                                            continue;
+                                            if (!plugin.getPermissionsManager().has(allowed, field.getSettings().getRequiredPermissionAllow()))
+                                            {
+                                                ChatBlock.send(sender, "noPermsForAllow", playerName);
+                                                continue;
+                                            }
                                         }
                                     }
 
@@ -303,7 +305,7 @@ public final class CommandManager implements CommandExecutor
                     {
                         if (args.length >= 1)
                         {
-                            if ((args[0]).equals("commandCuboidOpen"))
+                            if ((args[0]).equals(ChatBlock.format("commandCuboidOpen")))
                             {
                                 Field field = plugin.getForceFieldManager().getOneOwnedField(block, player, FieldFlag.CUBOID);
 
@@ -322,7 +324,7 @@ public final class CommandManager implements CommandExecutor
                                     plugin.getCommunicationManager().showNotFound(player);
                                 }
                             }
-                            else if ((args[0]).equals("commandCuboidClose"))
+                            else if ((args[0]).equals(ChatBlock.format("commandCuboidClose")))
                             {
                                 plugin.getCuboidManager().closeCuboid(player);
                             }
@@ -951,7 +953,46 @@ public final class CommandManager implements CommandExecutor
                                     if (field.insertFieldFlag(flagStr))
                                     {
                                         field.dirtyFlags();
+                                        plugin.getStorageManager().offerField(field);
                                         ChatBlock.send(sender, "flagInserted");
+                                    }
+                                    else
+                                    {
+                                        ChatBlock.send(sender, "flagNotExists");
+                                    }
+                                    plugin.getForceFieldManager().addSourceField(field);
+                                }
+                                else
+                                {
+                                    ChatBlock.send(sender, "flagExists");
+                                }
+                            }
+                            else
+                            {
+                                plugin.getCommunicationManager().showNotFound(player);
+                            }
+                            return true;
+                        }
+                    }
+                    else if (cmd.equals(ChatBlock.format("commandClear")) && plugin.getPermissionsManager().has(player, "preciousstones.admin.insert") && hasplayer)
+                    {
+                        if (args.length == 1)
+                        {
+                            String flagStr = args[0];
+
+                            Field field = plugin.getForceFieldManager().getOneOwnedField(block, player, FieldFlag.ALL);
+
+                            if (field != null)
+                            {
+                                if (field.hasFlag(flagStr) || field.hasDisabledFlag(flagStr))
+                                {
+                                    plugin.getForceFieldManager().removeSourceField(field);
+
+                                    if (field.clearFieldFlag(flagStr))
+                                    {
+                                        field.dirtyFlags();
+                                        plugin.getStorageManager().offerField(field);
+                                        ChatBlock.send(sender, "flagCleared");
                                     }
                                     else
                                     {
@@ -1130,7 +1171,7 @@ public final class CommandManager implements CommandExecutor
 
                                         if (count > 0)
                                         {
-                                            ChatBlock.send(sender, "translocationDeletedBlocks", count, Helper.friendlyBlockType(Material.getMaterial(entry.getTypeId()).toString()), field.getName());
+                                            ChatBlock.send(sender, "translocationDeletedBlocks", count, Helper.friendlyBlockType(entry.getTypeId()), field.getName());
                                         }
                                         else
                                         {
@@ -1479,12 +1520,12 @@ public final class CommandManager implements CommandExecutor
 
                                     if (fields > 0)
                                     {
-                                        ChatBlock.send(sender, "deletedFields", fields, Material.getMaterial(type.getTypeId()));
+                                        ChatBlock.send(sender, "deletedFields", fields, Helper.getMaterialString(type.getTypeId()));
                                     }
 
                                     if (ubs > 0)
                                     {
-                                        ChatBlock.send(sender, "deletedUnbreakables", ubs, Material.getMaterial(type.getTypeId()));
+                                        ChatBlock.send(sender, "deletedUnbreakables", ubs, Helper.getMaterialString(type.getTypeId()));
                                     }
 
                                     if (ubs == 0 && fields == 0)
@@ -1532,7 +1573,7 @@ public final class CommandManager implements CommandExecutor
 
                                     if (fields > 0)
                                     {
-                                        ChatBlock.send(sender, "deletedFields", fields, Material.getMaterial(type.getTypeId()));
+                                        ChatBlock.send(sender, "deletedFields", fields, Helper.getMaterialString(type.getTypeId()));
                                     }
                                     else
                                     {
@@ -2074,6 +2115,11 @@ public final class CommandManager implements CommandExecutor
                                 ChatBlock.send(sender, "noOrphansFound");
                             }
                         }
+                        return true;
+                    }
+                    else if (cmd.equals(ChatBlock.format("commandPull")) && plugin.getPermissionsManager().has(player, "preciousstones.admin.pull"))
+                    {
+                        plugin.getStorageManager().loadWorldData();
                         return true;
                     }
                     else if (cmd.equals(ChatBlock.format("commandBypass")) && plugin.getPermissionsManager().has(player, "preciousstones.bypass.toggle"))

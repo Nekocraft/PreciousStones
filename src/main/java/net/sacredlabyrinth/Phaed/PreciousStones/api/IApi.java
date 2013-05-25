@@ -38,7 +38,8 @@ public interface IApi
     boolean isPStone(Location location);
 
     /**
-     * If a field with the specified flag is currently protecting the area
+     * If an enabled field with the specified enabled flag is currently protecting the area,
+     * use this to know whether a block is being affected by a field.
      *
      * @param flag the flag that is protecting the area (use FieldFlag.ALL to target any flag)
      * @param location the location that is being protected
@@ -47,7 +48,7 @@ public interface IApi
     boolean isFieldProtectingArea(FieldFlag flag, Location location);
 
     /**
-     * Returns the fields with the specified flag that are currently protecting the area
+     * Returns the enabled fields with the specified enabled flag that are currently protecting the area
      *
      * @param flag the flag that is protecting the area (use FieldFlag.ALL to target any flag)
      * @param location the location that is being protected
@@ -69,7 +70,25 @@ public interface IApi
      * @param player the player who will be affected by the flag
      * @param flag the flag that you want to test against
      * @param location the location you want to test against
-     * @return whether th eflag applies to the player
+     * @return whether the flag applies to the player
      */
     boolean flagAppliesToPlayer(Player player, FieldFlag flag, Location location);
+
+    /**
+     * Returns a count of fields the player has placed
+     *
+     * @param player the player whose fields you want counted
+     * @param flag the flag that will identify the field.  Use FieldFlag.ALL to count all of his fields
+     * @return the number of fields this player has placed
+     */
+    int getPlayerFieldCount(Player player, FieldFlag flag);
+
+    /**
+     * Returns all of the fields the player has placed
+     *
+     * @param player the player whose fields you want
+     * @param flag   the flag that will identify the field.  Use FieldFlag.ALL to count all of his fields
+     * @return a list of fields the player placed, it is never null.  If the player has not placed any fields it will be empty
+     */
+    List<Field> getPlayerFields(Player player, FieldFlag flag);
 }

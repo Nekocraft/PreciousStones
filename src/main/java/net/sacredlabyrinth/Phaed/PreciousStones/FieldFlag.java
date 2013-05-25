@@ -43,6 +43,7 @@ public enum FieldFlag
     PROTECT_VILLAGERS,
     PROTECT_CROPS,
     PROTECT_LWC,
+    PROTECT_INVENTORIES,
     ROLLBACK_EXPLOSIONS,
     REMOVE_MOB,
     HEAL,
@@ -151,7 +152,8 @@ public enum FieldFlag
     BUYABLE,
     DELETE_IF_NO_PERMISSION,
     COMMAND_BLACKLISTING,
-    COMMAND_BLACKLIST
+    COMMAND_BLACKLIST,
+    ANTI_PLOT
     ;
 
     /**
@@ -174,6 +176,7 @@ public enum FieldFlag
         FieldFlag.PROTECT_ANIMALS,
         FieldFlag.PROTECT_CROPS,
         FieldFlag.PROTECT_MOBS,
+        FieldFlag.PROTECT_INVENTORIES,
         FieldFlag.PROTECT_VILLAGERS,
         FieldFlag.PROTECT_LWC,
         FieldFlag.DAMAGE,

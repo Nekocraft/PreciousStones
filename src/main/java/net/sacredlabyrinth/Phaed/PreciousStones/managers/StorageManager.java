@@ -289,6 +289,9 @@ public class StorageManager
             @Override
             public void run()
             {
+                plugin.getForceFieldManager().doFinalize();
+                processQueue();
+
                 plugin.getForceFieldManager().clearChunkLists();
                 plugin.getUnbreakableManager().clearChunkLists();
 
@@ -612,24 +615,6 @@ public class StorageManager
 
                         FieldSettings fs = plugin.getSettingsManager().getFieldSettings(field);
 
-                        // check for snitch fields to purge
-
-                        if (fs != null && fs.hasDefaultFlag(FieldFlag.SNITCH))
-                        {
-                            PreciousStones.debug("Snitch age: %s", field.getAgeInDays());
-
-                            if (field.getAgeInDays() >= plugin.getSettingsManager().getPurgeSnitchAfterDays())
-                            {
-                                PreciousStones.debug("PURGED %s", field.toString());
-
-                                deleteSnitchEntries(field);
-                                field.markForDeletion();
-                                offerField(field);
-                                purged++;
-                                continue;
-                            }
-                        }
-
                         if (fs != null)
                         {
                             field.setSettings(fs);
@@ -730,24 +715,6 @@ public class StorageManager
 
                         FieldSettings fs = plugin.getSettingsManager().getFieldSettings(field);
 
-                        // check for fields to purge
-
-                        if (fs != null && fs.hasDefaultFlag(FieldFlag.SNITCH))
-                        {
-                            PreciousStones.debug("Snitch age: %s", field.getAgeInDays());
-
-                            if (field.getAgeInDays() >= plugin.getSettingsManager().getPurgeSnitchAfterDays())
-                            {
-                                PreciousStones.debug("PURGED %s", field.toString());
-
-                                deleteSnitchEntries(field);
-                                field.markForDeletion();
-                                offerField(field);
-                                purged++;
-                                continue;
-                            }
-                        }
-
                         if (fs != null)
                         {
                             field.setSettings(fs);
@@ -838,18 +805,6 @@ public class StorageManager
                         field.setId(id);
 
                         FieldSettings fs = plugin.getSettingsManager().getFieldSettings(field);
-
-                        if (field.getAgeInDays() > plugin.getSettingsManager().getPurgeSnitchAfterDays())
-                        {
-                            if (fs != null && fs.hasDefaultFlag(FieldFlag.SNITCH))
-                            {
-                                deleteSnitchEntries(field);
-                                field.markForDeletion();
-                                offerField(field);
-                                purged++;
-                                continue;
-                            }
-                        }
 
                         if (fs != null)
                         {
@@ -1039,7 +994,7 @@ public class StorageManager
 
         if (field.isDirty(DirtyFieldReason.OWNER))
         {
-            subQuery += "owner = '" + field.getOwner() + "', ";
+            subQuery += "owner = '" + Helper.escapeQuotes(field.getOwner()) + "', ";
         }
 
         if (field.isDirty(DirtyFieldReason.RADIUS))
@@ -1061,6 +1016,7 @@ public class StorageManager
         {
             subQuery += "name = '" + Helper.escapeQuotes(field.getName()) + "', ";
         }
+
         if (field.isDirty(DirtyFieldReason.ALLOWED))
         {
             subQuery += "packed_allowed = '" + Helper.escapeQuotes(field.getPackedAllowed()) + "', ";
@@ -1083,11 +1039,11 @@ public class StorageManager
 
         if (!subQuery.isEmpty())
         {
-            String query = "UPDATE `pstone_fields` SET " + Helper.stripTrailing(subQuery, ", ") + " WHERE x = " + field.getX() + " AND y = " + field.getY() + " AND z = " + field.getZ() + " AND world = '" + field.getWorld() + "';";
+            String query = "UPDATE `pstone_fields` SET " + Helper.stripTrailing(subQuery, ", ") + " WHERE x = " + field.getX() + " AND y = " + field.getY() + " AND z = " + field.getZ() + " AND world = '" + Helper.escapeQuotes(field.getWorld()) + "';";
 
             if (field.hasFlag(FieldFlag.CUBOID))
             {
-                query = "UPDATE `pstone_cuboids` SET " + Helper.stripTrailing(subQuery, ", ") + " WHERE x = " + field.getX() + " AND y = " + field.getY() + " AND z = " + field.getZ() + " AND world = '" + field.getWorld() + "';";
+                query = "UPDATE `pstone_cuboids` SET " + Helper.stripTrailing(subQuery, ", ") + " WHERE x = " + field.getX() + " AND y = " + field.getY() + " AND z = " + field.getZ() + " AND world = '" + Helper.escapeQuotes(field.getWorld()) + "';";
             }
 
             core.execute(query);

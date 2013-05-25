@@ -5,7 +5,10 @@ import net.sacredlabyrinth.Phaed.PreciousStones.entries.*;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Unbreakable;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Vec;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Hanging;
@@ -2725,6 +2728,7 @@ public class CommunicationManager
         {
             return false;
         }
+        PreciousStones.debug("1");
 
         ChatBlock cb = getNewChatBlock(player);
         FieldSettings fs = field.getSettings();
@@ -2749,6 +2753,8 @@ public class CommunicationManager
             }
         }
 
+        PreciousStones.debug("2");
+
         cb.addRow("  " + color + ChatBlock.format("_owner") + ": ", ChatColor.AQUA + field.getOwner(), "");
 
         if (field.getAllowed().size() > 0)
@@ -2769,6 +2775,8 @@ public class CommunicationManager
                 cb.addRow("  " + title, ChatColor.WHITE + getAllowed(allowed, i * 2), getAllowed(allowed, (i * 2) + 1));
             }
         }
+
+        PreciousStones.debug("3");
 
         if (field.hasFlag(FieldFlag.CUBOID))
         {
@@ -2796,10 +2804,13 @@ public class CommunicationManager
 
         cb.addRow("  " + color + ChatBlock.format("_location") + ": ", ChatColor.AQUA + "" + field.getX() + " " + field.getY() + " " + field.getZ(), "");
 
+        PreciousStones.debug("4");
 
         List<FieldFlag> flags = new ArrayList<FieldFlag>(field.getFlags());
+        List<FieldFlag> insertedFlags = field.getInsertedFlags();
         List<FieldFlag> disabledFlags = field.getDisabledFlags();
 
+        flags.addAll(insertedFlags);
         flags.addAll(disabledFlags);
 
         for (FieldFlag hid : FieldFlag.getHidden())
@@ -2807,19 +2818,53 @@ public class CommunicationManager
             flags.remove(hid);
         }
 
-        int rows = (int) Math.ceil(((double) flags.size()) / 2.0);
+        PreciousStones.debug("5");
 
-        for (int i = 0; i < rows; i++)
+        boolean addedTitle = false;
+
+        for (FieldFlag flag : flags)
         {
-            String title = "";
-
-            if (i == 0)
+            if (flag == null)
             {
-                title = color + ChatBlock.format("_flags") + ": ";
+                continue;
             }
 
-            cb.addRow("  " + title, getFlag(disabledFlags, field.getSettings(), flags, i * 2), getFlag(disabledFlags, field.getSettings(), flags, (i * 2) + 1));
+            String title = "";
+
+            if (!addedTitle)
+            {
+                title = color + ChatBlock.format("_flags") + ": ";
+                addedTitle = true;
+            }
+
+            ChatColor c = ChatColor.WHITE;
+
+            if (disabledFlags.contains(flag))
+            {
+                c = ChatColor.DARK_GRAY;
+            }
+
+            if (flag.isUnToggable())
+            {
+                c = ChatColor.AQUA;
+            }
+
+            String flagStr = Helper.toFlagStr(flag);
+
+            if (field.getSettings().isReversedFlag(flag))
+            {
+                flagStr = "~" + flagStr;
+            }
+
+            if (field.getSettings().isAlledFlag(flag))
+            {
+                flagStr = "^" + flagStr;
+            }
+
+            cb.addRow("  " + title, c + flagStr);
         }
+
+        PreciousStones.debug("6");
 
         if (field.hasFlag(FieldFlag.POTIONS))
         {
@@ -2845,15 +2890,21 @@ public class CommunicationManager
                 ChatBlock.saySingle(player, "sepFieldInfo");
             }
 
-            cb.sendBlock(player);
+            boolean more = cb.sendBlock(player, plugin.getSettingsManager().getLinesPerPage());
+
+            if (more)
+            {
+                ChatBlock.sendBlank(player);
+                ChatBlock.send(player, "moreNextPage");
+            }
 
             if (field.isDisabled())
             {
                 ChatBlock.sendBlank(player);
-
                 showMessage = false;
             }
         }
+        PreciousStones.debug("7");
 
         return showMessage;
     }
@@ -2906,42 +2957,6 @@ public class CommunicationManager
         }
     }
 
-    private String getFlag(List<FieldFlag> disabledFlags, FieldSettings settings, List<FieldFlag> flags, int index)
-    {
-        if (index < flags.size())
-        {
-            FieldFlag flag = flags.get(index);
-
-            ChatColor color = ChatColor.WHITE;
-
-            if (disabledFlags.contains(flag))
-            {
-                color = ChatColor.DARK_GRAY;
-            }
-
-            if (flag.isUnToggable())
-            {
-                color = ChatColor.AQUA;
-            }
-
-            String flagStr = Helper.toFlagStr(flag);
-
-            if (settings.isReversedFlag(flag))
-            {
-                flagStr = "~" + flagStr;
-            }
-
-            if (settings.isAlledFlag(flag))
-            {
-                flagStr = "^" + flagStr;
-            }
-
-            return color + flagStr;
-        }
-
-        return "";
-    }
-
     private String getAllowed(List<String> allowed, int index)
     {
         if (index < allowed.size())
@@ -2982,15 +2997,9 @@ public class CommunicationManager
             String customHeight = fs.getHeight() > 0 ? " " + ChatBlock.format("headerConfiguredFields2", fs.getHeight()) : "";
 
             int id = fs.getTypeId();
-            Material material = Material.getMaterial(id);
             BlockTypeEntry entry = new BlockTypeEntry(fs.getTypeId(), fs.getData());
 
-            if (material == null)
-            {
-                continue;
-            }
-
-            cb.addRow(ChatBlock.format("headerConfiguredFields", fs.getTitle(), Helper.friendlyBlockType(material.toString()), entry.toString(), fs.getRadius()) + customHeight);
+            cb.addRow(ChatBlock.format("headerConfiguredFields", fs.getTitle(), Helper.friendlyBlockType(id), entry.toString(), fs.getRadius()) + customHeight);
         }
 
         if (cb.size() > 0)
@@ -3582,6 +3591,7 @@ public class CommunicationManager
         if (plugin.getPermissionsManager().has(player, "preciousstones.admin.insert") && hasPlayer)
         {
             cb.addRow("menu29");
+            cb.addRow("menu62");
         }
 
         if (plugin.getPermissionsManager().has(player, "preciousstones.admin.reset") && hasPlayer)
@@ -3643,6 +3653,11 @@ public class CommunicationManager
         if (plugin.getPermissionsManager().has(player, "preciousstones.admin.revert"))
         {
             cb.addRow("menu42");
+        }
+
+        if (plugin.getPermissionsManager().has(player, "preciousstones.admin.pull"))
+        {
+            cb.addRow("menu63");
         }
 
         if (plugin.getPermissionsManager().has(player, "preciousstones.admin.enableall"))

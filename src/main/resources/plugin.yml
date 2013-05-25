@@ -136,6 +136,8 @@ permissions:
     description: 可以不受禁止拿走物品展示柜效果的影响
   preciousstones.bypass.entity-interact:
     description: 可以不受实体互动保护影响
+  preciousstones.bypass.required-permission:
+    description: 可以不受权限需求影响
   preciousstones.alert.notify.place:
     description: 可以获取方块放置通知
   preciousstones.alert.notify.destroy:
@@ -192,6 +194,8 @@ permissions:
     description: 能使用 /ps clean
   preciousstones.admin.revert:
     description: 能使用 /ps revert
+  preciousstones.admin.pull:
+    description: 能使用 /ps pull
   preciousstones.admin.details:
     description: 可以用鼠标右键单击查看所有细节
   preciousstones.admin.bypass.log:
@@ -339,6 +343,7 @@ permissions:
       preciousstones.bypass.item-frame-take: true
       preciousstones.bypass.commandblacklist: true
       preciousstones.bypass.entity-interact: true
+      preciousstones.bypass.required-permission: true
   preciousstones.alert.*:
     description: 获得在游戏中的提示，通知和警告 (巡查员)
     default: false
@@ -372,6 +377,7 @@ permissions:
       preciousstones.admin.setowner: true
       preciousstones.admin.clean: true
       preciousstones.admin.revert: true
+      preciousstones.admin.pull: true
       preciousstones.admin.details: true
       preciousstones.admin.bypass.log: true
       preciousstones.admin.viewconflicting: true

@@ -40,12 +40,12 @@ public final class SettingsManager
     private int cuboidVisualizationType;
     private boolean logToHawkEye;
     private List<String> blacklistedWorlds;
-    private int purgeSnitchAfterDays;
     private int purgeAfterDays;
     private int maxSnitchRecords;
     private int saveFrequency;
     private List<String> griefUndoBlackList;
     private int griefRevertMinInterval;
+    private boolean visualizationNewStyle;
     private int visualizeMarkBlock;
     private int visualizeFrameBlock;
     private int visualizeBlock;
@@ -119,7 +119,7 @@ public final class SettingsManager
     private int fenceMaxDepth;
     private int[] throughFields = new int[]{0, 6, 8, 9, 10, 11, 31, 32, 37, 38, 39, 40, 50, 51, 55, 59, 63, 65, 66, 69, 68, 70, 72, 75, 76, 77, 78, 83, 92, 93, 94, 104, 105, 106, 131, 132, 140, 141, 142};
     private int[] naturalThroughFields = new int[]{0, 6, 8, 9, 10, 11, 31, 32, 37, 38, 39, 40, 51, 59, 78, 83, 104, 105, 106, 141, 142};
-    private int[] fragileBlocks = new int[]{7, 8, 9, 10, 11, 14, 15, 16, 18, 20, 21, 30, 31, 52, 56, 73, 74, 79, 80, 89, 97, 100, 123, 124, 129, 152, 155};
+    private int[] fragileBlocks = new int[]{7, 8, 9, 10, 11, 14, 15, 16, 18, 20, 21, 30, 31, 52, 56, 73, 74, 79, 80, 89, 97, 100, 123, 124, 129, 133, 152, 153, 155};
     private HashSet<Integer> throughFieldsSet = new HashSet<Integer>();
     private HashSet<Integer> naturalThroughFieldSet = new HashSet<Integer>();
     private HashSet<Integer> fragileBlockSet = new HashSet<Integer>();
@@ -292,7 +292,6 @@ public final class SettingsManager
         // ********************************** Cleanup
 
         purgeAfterDays = loadInt("cleanup.player-inactivity-purge-days");
-        purgeSnitchAfterDays = loadInt("cleanup.snitch-unused-purge-days");
         purgeBannedPlayers = loadBoolean("cleanup.purge-banned-players");
 
         // ********************************** Saving
@@ -305,6 +304,7 @@ public final class SettingsManager
         visualizeFrameBlock = loadInt("visualization.frame-block-type");
         visualizeBlock = loadInt("visualization.block-type");
         visualizeSeconds = loadInt("visualization.seconds");
+        visualizationNewStyle = loadBoolean("visualization.new-dotted-style");
         visualizeEndOnMove = loadBoolean("visualization.end-on-player-move");
         visualizeMarkBlock = loadInt("visualization.mark-block-type");
         visualizeDensity = loadInt("visualization.default-density");
@@ -834,14 +834,6 @@ public final class SettingsManager
     public List<String> getBlacklistedWorlds()
     {
         return Collections.unmodifiableList(blacklistedWorlds);
-    }
-
-    /**
-     * @return the purgeSnitchAfterDays
-     */
-    public int getPurgeSnitchAfterDays()
-    {
-        return purgeSnitchAfterDays;
     }
 
     /**
@@ -1581,5 +1573,10 @@ public final class SettingsManager
     public boolean isCommandsToRentBuy()
     {
         return commandsToRentBuy;
+    }
+
+    public boolean isVisualizationNewStyle()
+    {
+        return visualizationNewStyle;
     }
 }

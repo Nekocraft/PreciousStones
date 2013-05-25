@@ -19,7 +19,8 @@ force-field-blocks:
     prevent-item-frame-take: true
     prevent-flow: true
     protect-crops: true
-    prevent-use: [23, 54, 61, 62]
+    protect-inventories: true
+    prevent-place-blacklist: [153]
     ?welcome-message: true
     ?farewell-message: true
     ?prevent-portal-enter: true
@@ -41,6 +42,7 @@ force-field-blocks:
     custom-height: 15
     allowed-only-inside: ["City Protection"]
     plot: true
+    no-conflict: true
     prevent-fire: true
     prevent-place: true
     prevent-destroy: true
@@ -48,6 +50,7 @@ force-field-blocks:
     prevent-enderman-destroy: true
     prevent-explosions: true
     prevent-unprotectable: true
+    protect-inventories: true
     prevent-flow: true
     ?prevent-teleport: true
     protect-crops: true
@@ -361,7 +364,6 @@ warn:
     place: true
 cleanup:
     player-inactivity-purge-days: 180
-    snitch-unused-purge-days: 30
     purge-banned-players: true
 settings:
     max-size-translocation: 100000
@@ -412,6 +414,7 @@ cuboid:
     visualization-blocktype: 20
     defining-blocktype: 49
 visualization:
+    new-dotted-style: true
     block-type: 20
     seconds: 30
     mark-block-type: 49
