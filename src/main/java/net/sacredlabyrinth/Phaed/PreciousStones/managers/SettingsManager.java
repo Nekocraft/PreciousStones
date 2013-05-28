@@ -136,6 +136,8 @@ public final class SettingsManager
     private FileConfiguration config;
     private FileConfiguration cleanConfig;
 
+    private String locale;
+
     /**
      *
      */
@@ -283,6 +285,7 @@ public final class SettingsManager
         oncePerBlockOnMove = loadBoolean("settings.check-once-per-block-on-move");
         useIdInSnitches = loadBoolean("settings.use-blockids-in-snitches");
         fenceMaxDepth = loadInt("settings.fence-max-depth");
+        locale = loadString("settings.locale");
 
         // ********************************** Cuboid
 
@@ -1490,6 +1493,11 @@ public final class SettingsManager
     public double getVersion()
     {
         return version;
+    }
+
+    public double getLocale()
+    {
+        return locale;
     }
 
     public void setVersion(int version)
