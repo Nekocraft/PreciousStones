@@ -7,10 +7,14 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.Locale;
 
 @SuppressWarnings("unchecked")
 public class LanguageManager
 {
+    private static final String I18N = "language";
+    private final transient Locale defaultLocale = Locale.getDefault();
+    private transient Locale currentLocale = defaultLocale;
     private File file;
     private TreeMap<String, Object> language = new TreeMap<String, Object>();
     private String[] comments = new String[]{
@@ -27,14 +31,20 @@ public class LanguageManager
             "\n#         {magic}, {bold}, {italic}, {reset}, {strikethrough}, {underline}\n\n",
     };
 
-    public LanguageManager()
+    public LanguageManager(String locale)
     {
         load();
+        if(!locate.equals(""))
+        {
+            currentLocale = Locale.forLanguageTag(locate);
+        }
     }
 
     public void load()
     {
-        file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + "language.yml");
+        Logger.getLogger("Minecraft").log(Level.INFO, String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
+        file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + I18N + "-" + currentLocale.toString() + ".yml");
+
         check();
     }
 
@@ -54,7 +64,7 @@ public class LanguageManager
 
     private void loadDefaults()
     {
-        InputStream defaultLanguage = getClass().getResourceAsStream("/language.yml");
+        InputStream defaultLanguage = getClass().getResourceAsStream("/" + I18N + ".yml");
         HashMap<String, Object> objects = (HashMap<String, Object>) new Yaml().load(defaultLanguage);
         if (objects != null)
         {
