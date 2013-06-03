@@ -1,11 +1,13 @@
 package net.sacredlabyrinth.Phaed.PreciousStones.managers;
 
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Locale;
 
@@ -13,114 +15,37 @@ import java.util.Locale;
 public class LanguageManager
 {
     private static final String I18N = "language";
-    private final transient Locale defaultLocale = Locale.getDefault();
-    private transient Locale currentLocale = defaultLocale;
-    private File file;
+    private final transient String defaultLocale = Locale.getDefault().toString();
+    private transient String currentLocale = defaultLocale;
+
     private TreeMap<String, Object> language = new TreeMap<String, Object>();
-    private String[] comments = new String[]{
-            "# Guidelines",
-            "\n#",
-            "\n# 1. Never change the contents inside the variables { }",
-            "\n# 2. You can rearrange the order that the variables appear on the sentences to best suit your language",
-            "\n# 3. You can add/remove colors as you please",
-            "\n# 4. If you change a command, make sure it's corresponding menu item matches",
-            "\n# 5. When new text is added on future versions, they will be added automatically to your language.yml file",
-            "\n#",
-            "\n# Colors: {aqua}, {black}, {blue}, {white}, {yellow}, {gold}, {gray}, {green}, {red} ",
-            "\n#         {dark-aqua}, {dark-blue}, {dark-gray}, {dark-green}, {dark-purple}, {dark-red}, {light-purple}",
-            "\n#         {magic}, {bold}, {italic}, {reset}, {strikethrough}, {underline}\n\n",
-    };
 
     public LanguageManager(String theLocale)
     {
+        currentLocale = theLocale;
         load();
-        if (!theLocale.equals(""))
-        {
-            String[] ss = theLocale.split("_");
-            if (ss != null && ss.length > 1) currentLocale = new Locale(ss[0], ss[1]);
-            else currentLocale = new Locale(theLocale);
-        }
     }
 
     public void load()
     {
-        PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
-
-        file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + I18N + "_" + currentLocale.toString() + ".yml");
-        check();
+        PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale));
+        // load default as base
+        tryLoad(I18N + ".yml");
+        // load custom as append
+        String[] codes = currentLocale.split("_");
+        if (codes.length > 1) tryLoad(I18N + currentLocale + ".yml");
+        if (codes.length > 0) tryLoad(I18N + codes[0] + ".yml");
     }
 
-    private void check()
+    private boolean tryLoad(String resname)
     {
-        boolean exists = (file).exists();
-
-        loadDefaults();
-
-        if (exists)
+        InputStream inputStream = getClass().getResourceAsStream("/" + resname);
+        if (inputStream != null)
         {
-            loadFile();
+            language.putAll((Map<? extends String, ?>) YamlConfiguration.loadConfiguration(inputStream));
+            return true;
         }
-
-        saveFile();
-    }
-
-    private void loadDefaults()
-    {
-        InputStream defaultLanguage = getClass().getResourceAsStream("/" + I18N + "_" + currentLocale.toString() + ".yml");
-        if(defaultLanguage == null){
-            PreciousStones.log(String.format("[PreciousStones] Fail load locale %s, rollback to default", currentLocale.toString()));
-            defaultLanguage = getClass().getResourceAsStream("/" + I18N + ".yml");
-        }
-        HashMap<String, Object> objects = (HashMap<String, Object>) new Yaml().load(defaultLanguage);
-        if (objects != null)
-        {
-            language.putAll(objects);
-        }
-    }
-
-    private void loadFile()
-    {
-        try
-        {
-            InputStream fileLanguage = new FileInputStream(file);
-            HashMap<String, Object> objects = (HashMap<String, Object>) new Yaml().load(fileLanguage);
-            if (objects != null)
-            {
-                language.putAll(objects);
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            // file not found
-        }
-    }
-
-    private void saveFile()
-    {
-        DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        options.setWidth(99999999);
-        options.setAllowUnicode(true);
-
-        try
-        {
-            FileWriter fw = new FileWriter(file);
-            StringWriter writer = new StringWriter();
-            new Yaml(options).dump(language, writer);
-
-            for(String comment: comments)
-            {
-                fw.write(comment);
-            }
-
-            fw.write(writer.toString());
-            fw.close();
-        }
-        catch (IOException e)
-        {
-            // could not save
-            e.printStackTrace();
-        }
+        return false;
     }
 
     public String get(String key)
