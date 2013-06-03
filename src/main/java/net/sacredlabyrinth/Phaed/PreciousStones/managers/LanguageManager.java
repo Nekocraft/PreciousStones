@@ -34,15 +34,15 @@ public class LanguageManager
     public LanguageManager(String locale)
     {
         load();
-        if(!locate.equals(""))
+        if(!locale.equals(""))
         {
-            currentLocale = Locale.forLanguageTag(locate);
+            currentLocale = Locale.forLanguageTag(locale);
         }
     }
 
     public void load()
     {
-        Logger.getLogger("Minecraft").log(Level.INFO, String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
+		PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
         file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + I18N + "-" + currentLocale.toString() + ".yml");
 
         check();

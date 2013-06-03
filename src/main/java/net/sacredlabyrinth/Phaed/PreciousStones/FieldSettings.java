@@ -139,7 +139,7 @@ public class FieldSettings
             }
             else
             {
-                PreciousStones.log(Level.WARNING, "** Spout not loaded, spout field skipped: %s", title);
+                PreciousStones.log(Level.WARNING, "** Spout 没有加载, Spout专属领域被跳过: %s", title);
             }
         }
         else

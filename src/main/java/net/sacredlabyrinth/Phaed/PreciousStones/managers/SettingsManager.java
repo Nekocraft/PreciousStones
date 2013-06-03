@@ -1495,10 +1495,11 @@ public final class SettingsManager
         return version;
     }
 
-    public double getLocale()
+    public String getLocale()
     {
         return locale;
     }
+
 
     public void setVersion(int version)
     {
