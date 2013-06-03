@@ -36,7 +36,7 @@ force-field-blocks:
     hidable: true
     cuboid: true
     mask-on-disabled: 80
--   title: City Plot
+-   title: 城市规划
     block: 153
     radius: 20
     custom-height: 15
