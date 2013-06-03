@@ -33,8 +33,8 @@ public class LanguageManager
         tryLoad(I18N + ".yml");
         // load custom as append
         String[] codes = currentLocale.split("_");
-        if (codes.length > 1) tryLoad(I18N + "_" + currentLocale + ".yml");
         if (codes.length > 0) tryLoad(I18N + "_" + codes[0] + ".yml");
+        if (codes.length > 1) tryLoad(I18N + "_" + currentLocale + ".yml");
     }
 
     private boolean tryLoad(String resname)
