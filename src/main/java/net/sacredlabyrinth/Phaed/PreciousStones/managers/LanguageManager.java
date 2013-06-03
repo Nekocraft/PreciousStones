@@ -28,7 +28,7 @@ public class LanguageManager
 
     public void load()
     {
-        PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale));
+        PreciousStones.log("[PreciousStones] Using locale %s", currentLocale);
         // load default as base
         tryLoad(I18N + ".yml");
         // load custom as append
