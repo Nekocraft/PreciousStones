@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Locale;
+import java.util.logging.Level;
 
 @SuppressWarnings("unchecked")
 public class LanguageManager
@@ -28,7 +29,7 @@ public class LanguageManager
 
     public void load()
     {
-        PreciousStones.log("[PreciousStones] Using locale %s", currentLocale);
+        PreciousStones.getLog().log(Level.INFO, "[PreciousStones] Using locale %s", currentLocale);
         // load default as base
         tryLoad(I18N + ".yml");
         // load custom as append
@@ -42,7 +43,7 @@ public class LanguageManager
         InputStream inputStream = getClass().getResourceAsStream("/" + resname);
         if (inputStream != null)
         {
-            language.putAll((Map<? extends String, ?>) YamlConfiguration.loadConfiguration(inputStream));
+            language.putAll((Map<? extends String, ?>) new Yaml().load(inputStream));
             return true;
         }
         return false;
