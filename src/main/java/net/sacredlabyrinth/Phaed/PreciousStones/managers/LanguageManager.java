@@ -29,7 +29,6 @@ public class LanguageManager
 
     public void load()
     {
-        PreciousStones.getLog().log(Level.INFO, "[PreciousStones] Using locale %s", currentLocale);
         // load default as base
         tryLoad(I18N + ".yml");
         // load custom as append
@@ -59,5 +58,10 @@ public class LanguageManager
         }
 
         return null;
+    }
+
+    public String getCurrentLocale()
+    {
+        return currentLocale;
     }
 }
