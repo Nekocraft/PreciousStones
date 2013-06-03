@@ -31,18 +31,20 @@ public class LanguageManager
             "\n#         {magic}, {bold}, {italic}, {reset}, {strikethrough}, {underline}\n\n",
     };
 
-    public LanguageManager(String locale)
+    public LanguageManager(String theLocale)
     {
         load();
-        if(!locale.equals(""))
+        if (!theLocale.equals(""))
         {
-            currentLocale = Locale.forLanguageTag(locale);
+            String[] ss = theLocale.split("_");
+            if (ss != null && ss.length > 1) currentLocale = new Locale(ss[0], ss[1]);
+            else currentLocale = new Locale(theLocale);
         }
     }
 
     public void load()
     {
-		PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
+        PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
         file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + I18N + "-" + currentLocale.toString() + ".yml");
 
         check();
