@@ -45,8 +45,8 @@ public class LanguageManager
     public void load()
     {
         PreciousStones.log(String.format("[PreciousStones] Using locale %s", currentLocale.toString()));
-        file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + I18N + "-" + currentLocale.toString() + ".yml");
 
+        file = new File(PreciousStones.getInstance().getDataFolder() + File.separator + I18N + "_" + currentLocale.toString() + ".yml");
         check();
     }
 
@@ -66,7 +66,11 @@ public class LanguageManager
 
     private void loadDefaults()
     {
-        InputStream defaultLanguage = getClass().getResourceAsStream("/" + I18N + ".yml");
+        InputStream defaultLanguage = getClass().getResourceAsStream("/" + I18N + "_" + currentLocale.toString() + ".yml");
+        if(defaultLanguage == null){
+            PreciousStones.log(String.format("[PreciousStones] Fail load locale %s, rollback to default", currentLocale.toString()));
+            defaultLanguage = getClass().getResourceAsStream("/" + I18N + ".yml");
+        }
         HashMap<String, Object> objects = (HashMap<String, Object>) new Yaml().load(defaultLanguage);
         if (objects != null)
         {
